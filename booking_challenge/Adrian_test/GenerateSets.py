@@ -14,26 +14,27 @@ import csv
 
 train = 0
 TEST_RATIO = 0.4
-NewTrain = []
-NewTest = []
+NewTrain = [["Index","user_id","checkin","checkout","city_id","device_class","affiliate_id","booker_country","hotel_country","utrip_id"]]
+NewTest = [["Index","user_id","checkin","checkout","city_id","device_class","affiliate_id","booker_country","hotel_country","utrip_id"]]
 
 
 def ProcessLine(row, assignment):
     global NewTrain
     global NewTest
     global train
+    global TEST_RATIO
 
     row_content = []
     col = 0
 
     #put the row into a list
-    while col < 9:
+    while col < 10:
         row_content.append(train.iloc[row,col])
         col = col +1
 
 
     #Input row from the original train set is to be added to the new train set
-    if assignment=="train":
+    if assignment=="Train":
         NewTrain.append(row_content)
 
     else:
@@ -59,11 +60,13 @@ def main():
     lastrow = train.shape[0]
 
     #we start iterating the first row
-    row = 1
+    row = 0
 
     while row<lastrow:
         #we store the ID of the trip into a variable
+
         current_trip_ID = train.iloc[row,9]
+
 
         # we check if the ID of the trip is the same we had in the last line, which means it is the same trip
         if current_trip_ID==last_trip_ID:
@@ -84,11 +87,11 @@ def main():
 
 
     #File has completely been iterated
-    with open("NewTrain.csv","w",newline="") as output:
+    with open("NewTrain.csv","w",newline="",encoding="utf-8") as output:
         writer = csv.writer(output)
         writer.writerows(NewTrain)
 
-    with open("NewTest.csv","w",newline="") as output:
+    with open("NewTest.csv","w",newline="",encoding="utf-8") as output:
         writer = csv.writer(output)
         writer.writerows(NewTest)
 
